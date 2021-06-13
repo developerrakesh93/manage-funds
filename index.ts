@@ -7,14 +7,7 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.get(
-//     "/",
-//     async (req: Request, res: Response): Promise<Response> => {
-//         return res.status(200).send({
-//             message: "Hello World!",
-//         });
-//     }
-// );
+
 app.use('/api/user', require('./routes/user'));
 app.use('/api/user/fund', require('./routes/fundusermapping'));
 
