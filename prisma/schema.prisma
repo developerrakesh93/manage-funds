@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model FundUserMapping {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  updatedBy Int
+  createdBy Int
+  user_id   Int?
+  funds_id  Int?
+  Funds     Funds?   @relation(fields: [funds_id], references: [id])
+  User      User?    @relation(fields: [user_id], references: [id])
+
+  @@index([funds_id], name: "funds_id")
+  @@index([user_id], name: "user_id")
+}
+
+model Funds {
+  id              Int               @id @default(autoincrement())
+  schemeCode      Int               @unique
+  schemeName      String            @unique @db.VarChar(255)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  updatedBy       Int
+  createdBy       Int
+  FundUserMapping FundUserMapping[]
+}
+
+model User {
+  id              Int               @id @default(autoincrement())
+  email           String?           @unique @db.VarChar(255)
+  name            String            @unique @db.VarChar(255)
+  mobile          Int?              @unique
+  isSuperAdmin    Boolean?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  updatedBy       Int?
+  createdBy       Int?
+  FundUserMapping FundUserMapping[]
+}
